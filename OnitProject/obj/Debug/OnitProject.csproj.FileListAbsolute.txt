@@ -13,3 +13,15 @@ Z:\Davide sul mio Mac\Dev\labSSD\OnitProject\OnitProject\bin\Debug\Data\blocco4I
 \\MACPRO-DAVIDE\Davide\Dev\labSSD\OnitProject\Onit\OnitProject\bin\Debug\OnitProject.exe.config
 \\MACPRO-DAVIDE\Davide\Dev\labSSD\OnitProject\Onit\OnitProject\obj\Debug\OnitProject.exe
 \\MACPRO-DAVIDE\Davide\Dev\labSSD\OnitProject\Onit\OnitProject\obj\Debug\OnitProject.pdb
+Z:\Davide sul mio Mac\Dev\labSSD\Onit\OnitProject\bin\Debug\OnitProject.exe.config
+Z:\Davide sul mio Mac\Dev\labSSD\Onit\OnitProject\obj\Debug\OnitProject.exe
+Z:\Davide sul mio Mac\Dev\labSSD\Onit\OnitProject\obj\Debug\OnitProject.pdb
+Z:\Davide sul mio Mac\Dev\labSSD\Onit\OnitProject\bin\Debug\Data\blocco4I.sqlite
+Z:\Davide sul mio Mac\Dev\labSSD\Onit\OnitProject\bin\Debug\OnitProject.exe
+Z:\Davide sul mio Mac\Dev\labSSD\Onit\OnitProject\bin\Debug\OnitProject.pdb
+Z:\Davide sul mio Mac\Dev\labSSD\Onit\OnitProject\bin\Debug\System.Data.SQLite.dll
+Z:\Davide sul mio Mac\Dev\labSSD\Onit\OnitProject\bin\Debug\System.Data.SQLite.pdb
+Z:\Davide sul mio Mac\Dev\labSSD\Onit\OnitProject\obj\Debug\OnitProject.csprojResolveAssemblyReference.cache
+Z:\Davide sul mio Mac\Dev\labSSD\Onit\OnitProject\obj\Debug\OnitProject.Form1.resources
+Z:\Davide sul mio Mac\Dev\labSSD\Onit\OnitProject\obj\Debug\OnitProject.Properties.Resources.resources
+Z:\Davide sul mio Mac\Dev\labSSD\Onit\OnitProject\obj\Debug\OnitProject.csproj.GenerateResource.Cache

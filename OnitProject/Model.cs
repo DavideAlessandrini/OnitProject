@@ -42,21 +42,21 @@ namespace OnitProject
                 _pickupSeq[i].priorità = minpriority(_pickupSeq[i].sku, i);
             }
         }
-        
+
         private int minpriority(Int32 sku, Int32 count)
         {
             Int32 min = 1;
-            for (int j = 0; j < count; j++ )
+            for (int j = 0; j < count; j++)
             {
                 if (_pickupSeq[j].sku == sku)
                 {
                     if (_pickupSeq[j].priorità <= _pickupSeq[count].priorità)
                         min = _pickupSeq[j].priorità;
-                        return _pickupSeq[j].priorità;
+                    return _pickupSeq[j].priorità;
                 }
                 else
                 {
-                    min = _pickupSeq[count - 1].priorità+1;
+                    min = _pickupSeq[count - 1].priorità + 1;
                 }
             }
             return min;
@@ -71,14 +71,41 @@ namespace OnitProject
                 IDbConnection _conn = new SQLiteConnection(_connString);
                 _conn.Open();//apre la connessione
                 IDbCommand _com = _conn.CreateCommand();
-                string queryText = "select LOCAZIONE,POSIZIONE,sku from capacita4I";
+                string queryText = "select LOCAZIONE,POSIZIONE,sku from giacenza4I";
                 _com.CommandText = queryText;//proprietà del commandtext che si aspetta una stringa
                 IDataReader reader = _com.ExecuteReader();//mi permette di leggere i risultati -> risultato dell'esecuzione del comando -> executereader serve per le select
                 while (reader.Read())//leggo 1 per 1 i record -> reader mi permette di vedere un record alla volta
                 {
-                    Console.WriteLine(reader["LOCAZIONE"] + " " + reader["POSIZIONE"] + " " + reader["sku"]+ " \n");
-                    Locazione l = new Locazione() { nome = reader["LOCAZIONE"].ToString(), capacità = Convert.ToInt32(reader["CAPACITA"]) };
-                    _locazioni.Add(l);
+                    Console.WriteLine(reader["LOCAZIONE"] + " " + reader["POSIZIONE"] + " " + reader["sku"] + " \n");
+                    var locazione = reader["LOCAZIONE"].ToString();
+                    var posizione = Convert.ToInt32(reader["POSIZIONE"]);
+                    var sku = Convert.ToInt32(reader["sku"]);
+
+                    foreach (var sel in _locazioni)
+                    {
+                        //Seleziono la locazione
+                        if (sel.nome == locazione)
+                        {
+                            //Ricerco se sku è già in sequenza di pickup
+                            foreach (var sk in _pickupSeq)
+                            {
+                                if (sk.sku == sku)
+                                {
+                                    sel.elementi.Add(sk);
+                                    break;
+                                }
+                                //Altrimenti lo carico assegnandoli una priorità max
+                                else
+                                {
+                                    sel.elementi.Add(new Sku() {sku = sku, priorità = _maxPriority, posizione = posizione });
+                                    break;
+                                }
+
+                            }
+
+                        }
+                    }
+
                 }
                 reader.Close();
                 _conn.Close();
@@ -87,6 +114,21 @@ namespace OnitProject
             {
                 Console.WriteLine("[readTable] Errore: " + ex.Message + Environment.NewLine);
             }
+
+            foreach (var sel in _locazioni)
+                checkLocazione(sel);
+        }
+
+        //Check di verifica delle locazioni
+        private void checkLocazione(Locazione l)
+        {
+            //Check sulla capacità della locazione
+            if (l.capacità < l.getMaxPosition())
+                l.capacità = l.getMaxPosition();
+            //Ordino la sequenza nella locazione secondo la posizione
+            var sortedList = l.elementi.OrderBy(x => x.posizione).ToList();
+            l.elementi.Clear();
+            l.elementi = sortedList;
         }
 
         //Lettura delle locazioni del magazzino
@@ -102,12 +144,15 @@ namespace OnitProject
                 IDataReader reader = _com.ExecuteReader();//mi permette di leggere i risultati -> risultato dell'esecuzione del comando -> executereader serve per le select
                 while (reader.Read())//leggo 1 per 1 i record -> reader mi permette di vedere un record alla volta
                 {
-                    Console.WriteLine(reader["LOCAZIONE"] +" " + reader["CAPACITA"] +  " \n");
+                    Console.WriteLine(reader["LOCAZIONE"] + " " + reader["CAPACITA"] + " \n");
                     Locazione l = new Locazione() { nome = reader["LOCAZIONE"].ToString(), capacità = Convert.ToInt32(reader["CAPACITA"]) };
                     _locazioni.Add(l);
                 }
                 reader.Close();
                 _conn.Close();
+                foreach (var sel in _locazioni)
+                    sel.elementi = new List<Sku>();
+                    
             }
             catch (Exception ex)
             {
