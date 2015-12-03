@@ -11,7 +11,7 @@ namespace OnitProject
         public Int32 sku { get; set; }
         public Int32 priorità { get; set; }
         public Int32 posizione { get; set; }
-
+        public Int32 spostamenti { get; set; }
 
     }
 }
