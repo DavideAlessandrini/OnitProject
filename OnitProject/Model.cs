@@ -38,11 +38,13 @@ namespace OnitProject
         private void setPriorityPickup()
         {
             for (int i = 0; i < _pickupSeq.Count; i++)
-            {
                 _pickupSeq[i].priorità = minpriority(_pickupSeq[i].sku, i);
-            }
+            
         }
 
+        //Verifica e impostazione della priorità corretta
+        //1 -> più importante
+        //99 -> meno importante
         private int minpriority(Int32 sku, Int32 count)
         {
             Int32 min = 1;
@@ -86,23 +88,24 @@ namespace OnitProject
                         //Seleziono la locazione
                         if (sel.nome == locazione)
                         {
-                            //Ricerco se sku è già in sequenza di pickup
+                            Sku s = null;
+                            Boolean trovato = false;
+                            //Ricerco se sku è già in sequenza di pickup perchè ha caricata la priorità
                             foreach (var sk in _pickupSeq)
                             {
                                 if (sk.sku == sku)
                                 {
-                                    sel.elementi.Add(sk);
+                                    s = sk;
+                                    trovato = true;
                                     break;
                                 }
                                 //Altrimenti lo carico assegnandoli una priorità max
-                                else
-                                {
-                                    sel.elementi.Add(new Sku() {sku = sku, priorità = _maxPriority, posizione = posizione });
-                                    break;
-                                }
-
                             }
-
+                            if (!trovato)
+                                s = new Sku() { sku = sku, priorità = _maxPriority, posizione = posizione };
+                             
+                            sel.elementi.Add(s);
+                            
                         }
                     }
 
