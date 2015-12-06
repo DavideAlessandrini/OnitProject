@@ -15,15 +15,15 @@ namespace OnitProject
 {
     public class Model
     {
-        List<Sku> _pickupSeq;
-        List<Locazione> _locazioni;
+        List<Sku> _listPickupSeq;
+        List<Location> _listOfLeases;
         String _connString;
         Int32 _maxPriority = 200;
 
         public Model()
         {
-            _pickupSeq = new List<Sku>();
-            _locazioni = new List<Locazione>();
+            _listPickupSeq = new List<Sku>();
+            _listOfLeases = new List<Location>();
             _connString = ConfigurationManager.ConnectionStrings["SQLiteConn"].ConnectionString;
         }
 
@@ -33,15 +33,15 @@ namespace OnitProject
 
             readPickupSeq();        //Lettura della sequenza di Pickup
             setPriorityPickup();    //Assegna le priorità 
-            readLocazioni();
-            readGiacenza();
+            readLeases();
+            readLying();
         }
 
         //Imposta la priorità della sequenza di Pickup
         private void setPriorityPickup()
         {
-            for (int i = 0; i < _pickupSeq.Count; i++)
-                _pickupSeq[i].priorità = minpriority(_pickupSeq[i].sku, i);
+            for (int i = 0; i < _listPickupSeq.Count; i++)
+                _listPickupSeq[i].priority = minpriority(_listPickupSeq[i].sku, i);
             
         }
 
@@ -53,15 +53,15 @@ namespace OnitProject
             Int32 min = 1;
             for (int j = 0; j < count; j++)
             {
-                if (_pickupSeq[j].sku == sku)
+                if (_listPickupSeq[j].sku == sku)
                 {
-                    if (_pickupSeq[j].priorità <= _pickupSeq[count].priorità)
-                        min = _pickupSeq[j].priorità;
-                    return _pickupSeq[j].priorità;
+                    if (_listPickupSeq[j].priority <= _listPickupSeq[count].priority)
+                        min = _listPickupSeq[j].priority;
+                    return _listPickupSeq[j].priority;
                 }
                 else
                 {
-                    min = _pickupSeq[count - 1].priorità + 1;
+                    min = _listPickupSeq[count - 1].priority + 1;
                 }
             }
             return min;
@@ -69,7 +69,7 @@ namespace OnitProject
         }
 
         //Lettura della giacenza
-        private void readGiacenza()
+        private void readLying()
         {
             try
             {
@@ -86,15 +86,15 @@ namespace OnitProject
                     var posizione = Convert.ToInt32(reader["POSIZIONE"]);
                     var sku = Convert.ToInt32(reader["sku"]);
 
-                    foreach (var sel in _locazioni)
+                    foreach (var sel in _listOfLeases)
                     {
                         //Seleziono la locazione
-                        if (sel.nome == locazione)
+                        if (sel.name == locazione)
                         {
                             Sku s = null;
                             Boolean trovato = false;
                             //Ricerco se sku è già in sequenza di pickup perchè ha caricata la priorità
-                            foreach (var sk in _pickupSeq)
+                            foreach (var sk in _listPickupSeq)
                             {
                                 if (sk.sku == sku)
                                 {
@@ -105,9 +105,9 @@ namespace OnitProject
                                 //Altrimenti lo carico assegnandoli una priorità max
                             }
                             if (!trovato)
-                                s = new Sku() { sku = sku, priorità = _maxPriority, posizione = posizione };
+                                s = new Sku() { sku = sku, priority = _maxPriority, position = posizione };
                              
-                            sel.elementi.Add(s);
+                            sel.listOfElement.Add(s);
                             
                         }
                     }
@@ -121,24 +121,24 @@ namespace OnitProject
                 Console.WriteLine("[readTable] Errore: " + ex.Message + Environment.NewLine);
             }
 
-            foreach (var sel in _locazioni)
-                checkLocazione(sel);
+            foreach (var sel in _listOfLeases)
+                checkLeases(sel);
         }
 
         //Check di verifica delle locazioni
-        private void checkLocazione(Locazione l)
+        private void checkLeases(Location l)
         {
             //Check sulla capacità della locazione
-            if (l.capacità < l.getMaxPosition())
-                l.capacità = l.getMaxPosition();
+            if (l.capacity < l.getMaxPosition())
+                l.capacity = l.getMaxPosition();
             //Ordino la sequenza nella locazione secondo la posizione
-            var sortedList = l.elementi.OrderBy(x => x.posizione).ToList();
-            l.elementi.Clear();
-            l.elementi = sortedList;
+            var sortedList = l.listOfElement.OrderBy(x => x.position).ToList();
+            l.listOfElement.Clear();
+            l.listOfElement = sortedList;
         }
 
         //Lettura delle locazioni del magazzino
-        private void readLocazioni()
+        private void readLeases()
         {
             try
             {
@@ -151,13 +151,13 @@ namespace OnitProject
                 while (reader.Read())//leggo 1 per 1 i record -> reader mi permette di vedere un record alla volta
                 {
                     Console.WriteLine(reader["LOCAZIONE"] + " " + reader["CAPACITA"] + " \n");
-                    Locazione l = new Locazione() { nome = reader["LOCAZIONE"].ToString(), capacità = Convert.ToInt32(reader["CAPACITA"]) };
-                    _locazioni.Add(l);
+                    Location l = new Location() { name = reader["LOCAZIONE"].ToString(), capacity = Convert.ToInt32(reader["CAPACITA"]) };
+                    _listOfLeases.Add(l);
                 }
                 reader.Close();
                 _conn.Close();
-                foreach (var sel in _locazioni)
-                    sel.elementi = new List<Sku>();
+                foreach (var sel in _listOfLeases)
+                    sel.listOfElement = new List<Sku>();
                     
             }
             catch (Exception ex)
@@ -181,8 +181,8 @@ namespace OnitProject
                 while (reader.Read())//leggo 1 per 1 i record -> reader mi permette di vedere un record alla volta
                 {
                     Console.WriteLine(reader["Ordini"] + " \n");
-                    Sku c = new Sku() { sku = Convert.ToInt32(reader["Ordini"]), priorità = count };
-                    _pickupSeq.Add(c);
+                    Sku c = new Sku() { sku = Convert.ToInt32(reader["Ordini"]), priority = count };
+                    _listPickupSeq.Add(c);
                     count++;
                 }
                 reader.Close();
