@@ -9,9 +9,9 @@ namespace OnitProject
     class Sku
     {
         public Int32 sku { get; set; }
-        public Int32 priorità { get; set; }
-        public Int32 posizione { get; set; }
-        public Int32 spostamenti { get; set; }
+        public Int32 priority { get; set; }
+        public Int32 position { get; set; }
+        public Int32 movements { get; set; }
 
     }
 }
