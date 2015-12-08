@@ -32,13 +32,16 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.solutionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.calculateCostToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem});
+            this.fileToolStripMenuItem,
+            this.solutionToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(932, 24);
@@ -57,16 +60,31 @@
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // closeToolStripMenuItem
             // 
             this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.closeToolStripMenuItem.Text = "Close";
             this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
+            // 
+            // solutionToolStripMenuItem
+            // 
+            this.solutionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.calculateCostToolStripMenuItem});
+            this.solutionToolStripMenuItem.Name = "solutionToolStripMenuItem";
+            this.solutionToolStripMenuItem.Size = new System.Drawing.Size(63, 20);
+            this.solutionToolStripMenuItem.Text = "Solution";
+            // 
+            // calculateCostToolStripMenuItem
+            // 
+            this.calculateCostToolStripMenuItem.Name = "calculateCostToolStripMenuItem";
+            this.calculateCostToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.calculateCostToolStripMenuItem.Text = "Calculate cost";
+            this.calculateCostToolStripMenuItem.Click += new System.EventHandler(this.calculateCostToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -90,6 +108,8 @@
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem solutionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem calculateCostToolStripMenuItem;
     }
 }
 

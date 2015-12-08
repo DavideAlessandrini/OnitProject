@@ -45,6 +45,83 @@ namespace OnitProject
             
         }
 
+        /// <summary>
+        /// find location number with SKU wich is closest to exit
+        /// </summary>
+        /// <param name="_sku">sku to find</param>
+        /// <param name="locations">locations to find in</param>
+        /// <returns>location number with closest SKU</returns>
+        private Int32 findClosestSKU(Sku _sku, List<Locazione> locations)
+        {
+            Int32 minPos = Int32.MaxValue;
+            Int32 minLocation = -1;
+            Int32 currentPos = 0;
+            for(Int32 locationNumber = 0; locationNumber < locations.Count; locationNumber++)
+            {
+                for (Int32 positionNumber = locations[locationNumber].elementi.Count - 1; positionNumber >= 0 ; positionNumber--)
+                {
+                    if (locations[locationNumber].elementi[positionNumber].sku == _sku.sku)
+                    {
+                        currentPos = locations[locationNumber].elementi.Count - positionNumber;
+                        if (currentPos < minPos)
+                        {
+                            currentPos = minPos;
+                            minLocation = locationNumber;
+                            break;
+                        }
+                    }
+                }
+            }
+            return minLocation;
+        }
+
+        /// <summary>
+        /// gets SKU from location by moving previous SKUs to nearby locations
+        /// </summary>
+        /// <param name="_sku">SKU to find</param>
+        /// <param name="locations">locations</param>
+        /// <param name="locationNumber">location number to get SKU from</param>
+        /// <returns>Number of steps needed to get SKU</returns>
+        private Int32 getSKU(Sku _sku, List<Locazione> locations, Int32 locationNumber)
+        {
+            Int32 _ret = 0;
+            Random myRandom = new Random();
+            Sku skuGetted = locations[locationNumber].getSku();
+            _ret++;
+            while (skuGetted.sku != _sku.sku)
+            {
+                Int32 locationToPush = locationNumber + myRandom.Next(2) - 1; // move only to nearby locations
+                locations[locationToPush].pushSku(skuGetted);
+                skuGetted = locations[locationNumber].getSku();
+                _ret++;
+            }
+            // here we assume that SKU is getted!
+            return _ret;
+        }
+
+        /// <summary>
+        /// Get solution cost for passed locations and order squence
+        /// </summary>
+        /// <param name="orders">order sequence</param>
+        /// <param name="locations">locations</param>
+        /// <returns>sloturion cost</returns>
+        private Int32 getSolutionCost(List<Sku> orders, List<Locazione> locations)
+        {
+            
+            Int32 _solutionCost = 0;
+            for (int orderNumber = 0; orderNumber < orders.Count; orderNumber++)
+            {
+                Int32 locationNum = findClosestSKU(orders[orderNumber], locations);
+                _solutionCost += getSKU(orders[orderNumber], locations, locationNum);
+            }
+            return _solutionCost;
+        }
+
+        public Int32 getCurrentSolutionCost()
+        {
+            return getSolutionCost(_pickupSeq, _locazioni);
+        }
+
         //Verifica e impostazione della priorità corretta
         //1 -> più importante
         //99 -> meno importante

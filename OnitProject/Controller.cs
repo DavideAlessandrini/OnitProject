@@ -18,5 +18,10 @@ namespace OnitProject
         {
             _model.readData(path);
         }
+
+        internal Int32 getSolutionCost()
+        {
+            return _model.getCurrentSolutionCost();
+        }
     }
 }

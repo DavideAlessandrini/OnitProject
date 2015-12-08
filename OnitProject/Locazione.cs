@@ -22,5 +22,25 @@ namespace OnitProject
                     max = sel.posizione;
             return max;
         }
+        
+        /// <summary>
+        /// Gets element from location stack
+        /// </summary>
+        /// <returns></returns>
+        public Sku getSku()
+        {
+            Sku _ret = elementi[elementi.Count - 1];
+            elementi.RemoveAt(elementi.Count - 1);
+            return _ret;
+        }
+
+        /// <summary>
+        /// Pushes SKU element to location stack
+        /// </summary>
+        /// <param name="_sku">SKU to push</param>
+        public void pushSku(Sku _sku)
+        {
+            elementi.Add(_sku);
+        }
     }
 }

@@ -29,5 +29,11 @@ namespace OnitProject
             String path = Utility.openFile("sqlite");
             _controller.readData(path);
         }
+
+        private void calculateCostToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Int32 cost = _controller.getSolutionCost();
+            DialogResult result = MessageBox.Show("z = " + cost, "Current solution cost", MessageBoxButtons.OK);
+        }
     }
 }
